@@ -1,6 +1,7 @@
+//requisição http que identifica a autenticação do usuario
 import { api, requestConfig } from "../utils/config.jsx";
 
-//register an user
+// register an user
 const register = async (data) => {
   const config = requestConfig("POST", data);
   try {
@@ -11,6 +12,7 @@ const register = async (data) => {
     if (res) {
       localStorage.setItem("user", JSON.stringify(res));
     }
+    return res
   } catch (error) {
     console.log(error);
   }
