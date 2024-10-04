@@ -9,7 +9,7 @@ import "./config/db.js"
 
 dotenv.config();
 
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 5173; 
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-app.use(cors({credentials: true, origin: "http://localhost:3000"}));
+app.use(cors({credentials: true, origin: "http://localhost:5173"}));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")))
 
 
