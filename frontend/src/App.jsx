@@ -15,6 +15,7 @@ import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -35,6 +36,10 @@ function App() {
             <Route
               path="/profile"
               element={auth ? <EditProfile /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/users/:id"
+              element={auth ? <Profile /> : <Navigate to="/login" />}
             />
             <Route
               path="/login"
