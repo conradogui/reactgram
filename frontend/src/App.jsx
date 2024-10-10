@@ -16,6 +16,7 @@ import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
+import Photo from "./pages/Photo/Photo.jsx";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -48,6 +49,10 @@ function App() {
             <Route
               path="/register"
               element={!auth ? <Register /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/photos/:id"
+              element={auth ? <Photo /> : <Navigate to="/login" />}
             />
           </Routes>
         </div>
