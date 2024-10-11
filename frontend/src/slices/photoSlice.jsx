@@ -96,6 +96,38 @@ export const like = createAsyncThunk("photo/like", async (id, thunkAPI) => {
   return data;
 });
 
+//add comment to a photo
+export const comment = createAsyncThunk(
+  "photo/comment",
+  async (commentData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await photoService.comment(
+      { comment: commentData.comment },
+      commentData.id,
+      token
+    );
+
+    //check for errors
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
+
+//get all photos
+export const getPhotos = createAsyncThunk(
+  "photo/getAll",
+  async (_, thunkAPI) => { //posso anular o primeiro argumento com o _
+
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await photoService.getPhotos(token)
+
+    return data
+  }
+)
+
 export const photoSlice = createSlice({
   name: "photo",
   initialState,
@@ -186,12 +218,12 @@ export const photoSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-        if(state.photo.likes) {
+        if (state.photo.likes) {
           state.photo.likes.push(action.payload.userId);
         }
         state.photos.map((photo) => {
-          if (photo._id === action.payload.photo.photoId) {
-            return photo.likes.push(action.payload.userId)
+          if (photo._id === action.payload.photoId) {
+            return photo.likes.push(action.payload.userId);
           }
           return photo;
         });
@@ -200,6 +232,29 @@ export const photoSlice = createSlice({
       .addCase(like.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(comment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+
+        state.photo.comments.push(action.payload.comment);
+
+        state.message = action.payload.message;
+      })
+      .addCase(comment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getPhotos.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getPhotos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.photos = action.payload;
       })
   },
 });
